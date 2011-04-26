@@ -1,11 +1,11 @@
 Summary:	sqlmap: Automatic SQL injection tool
 Name:		sqlmap
-Version:	0.6.4
-Release:	0.4
+Version:	0.9
+Release:	0.5
 License:	GPL v2
 Group:		Networking
-Source0:	http://dl.sourceforge.net/sqlmap/%{name}-%{version}.tar.bz2
-# Source0-md5:	a530569ee6335e960914d9b1d6527477
+Source0:	http://dl.sourceforge.net/sqlmap/%{name}-%{version}.tar.gz
+# Source0-md5:	608d5773e0925e96e618171829d679b9
 URL:		http://sqlmap.sourceforge.net/
 BuildRequires:	python-devel
 Patch0:		%{name}-paths.patch
@@ -14,7 +14,7 @@ Requires:	python
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_appdir		%{_datadir}/%{name}
+#%define		_appdir		%{_datadir}/%{name}
 
 %description
 sqlmap is an open source command-line automatic SQL injection tool
@@ -28,7 +28,7 @@ dump entire or user's specific DBMS tables/columns, run his own SQL
 statement, read specific files on the file system and more.
 
 %prep
-%setup -q
+%setup -q -n %{name}
 %patch0 -p1
 %{__sed} -i -e '1s,^#!.*python,#!%{__python},' sqlmap.py
 
