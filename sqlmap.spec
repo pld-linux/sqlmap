@@ -1,7 +1,7 @@
 Summary:	sqlmap: Automatic SQL injection tool
 Name:		sqlmap
 Version:	0.9
-Release:	0.5
+Release:	0.6
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/sqlmap/%{name}-%{version}.tar.gz
@@ -10,7 +10,8 @@ URL:		http://sqlmap.sourceforge.net/
 BuildRequires:	python-devel
 Patch0:		%{name}-paths.patch
 BuildRequires:	rpmbuild(macros) >= 1.234
-Requires:	python
+Requires:	python(abi) >= 2.6
+Requires:	upx
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -31,6 +32,29 @@ statement, read specific files on the file system and more.
 %setup -q -n %{name}
 %patch0 -p1
 %{__sed} -i -e '1s,^#!.*python,#!%{__python},' sqlmap.py
+
+#Remove binary plugins
+rm -rf udf
+rm -rf lib/contrib/upx
+rm -f  shell/runcmd.exe_
+
+#Uncloack files
+cd shell
+find backdoor.*_ stager.*_ -type f -exec python ../extra/cloak/cloak.py -d -i '{}' \;
+cd ..
+
+#Remove source files for other OS
+rm -rf extra/runcmd
+rm -rf extra/udfhack/windows
+
+#Rwmove .svn files
+find ./ -name ".svn" |xargs rm -rf
+
+%build
+#cd extra/udfhack/linux/lib_mysqludf_sys
+#make all
+#cd ../lib_postgresqludf_sys
+#make all
 
 %install
 rm -rf $RPM_BUILD_ROOT
