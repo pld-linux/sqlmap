@@ -30,7 +30,7 @@ statement, read specific files on the file system and more.
 
 %prep
 %setup -q -n %{name}
-%patch0 -p1
+%patch -P0 -p1
 %{__sed} -i -e '1s,^#!.*python,#!%{__python},' sqlmap.py
 
 #Remove binary plugins
